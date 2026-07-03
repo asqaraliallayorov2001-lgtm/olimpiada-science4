@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olimpiada.Science.uz — Biologiya va Tabiiy fanlar testlari</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #EAEEDF;
+    --bg-card: #F6F7EE;
+    --ink: #15271D;
+    --ink-soft: #46594C;
+    --pine: #1E3A2C;
+    --leaf: #5C8A56;
+    --ochre: #C08A2E;
+    --rust: #A8452F;
+    --line: #C9D1BC;
+    --radius: 4px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Karla', sans-serif;
+    min-height:100vh;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(30,58,44,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+  header{
+    padding:28px 6vw 20px;
+    border-bottom:2px solid var(--pine);
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .brand{display:flex; align-items:baseline; gap:12px;}
+  .brand-mark{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:1.5rem;
+    letter-spacing:-0.01em;
+    color:var(--pine);
+  }
+  .brand-tag{
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    border-left:2px solid var(--ochre);
+    padding-left:10px;
+  }
+  .header-right{display:flex; align-items:center; gap:18px;}
+  .progress-summary{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    text-align:right;
+  }
+  .progress-summary strong{color:var(--pine); font-family:'Fraunces',serif; font-size:1.1rem;}
+  .admin-toggle{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    background:none;
+    border:1.5px solid var(--line);
+    padding:7px 14px;
+    border-radius:20px;
+    cursor:pointer;
+    font-family:'Karla', sans-serif;
+    font-weight:600;
+  }
+  .admin-toggle:hover{border-color:var(--ochre); color:var(--pine);}
+  .admin-toggle.logged-in{background:var(--pine); color:#fff; border-color:var(--pine);}
+
+  main{padding:36px 6vw 80px; max-width:1200px; margin:0 auto;}
+
+  .section-eyebrow{
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ochre);
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  h1.page-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:2.1rem;
+    color:var(--pine);
+    margin-bottom:28px;
+    max-width:640px;
+    line-height:1.15;
+  }
+
+  .subject-tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:26px;
+    border-bottom:2px solid var(--line);
+  }
+  .subject-tab{
+    background:none;
+    border:none;
+    padding:10px 4px;
+    margin-bottom:-2px;
+    font-family:'Fraunces', serif;
+    font-size:1.05rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+  }
+  .subject-tab + .subject-tab{margin-left:22px;}
+  .subject-tab.active{
+    color:var(--pine);
+    border-bottom-color:var(--ochre);
+  }
+  .subject-tab .count{
+    font-family:'Karla', sans-serif;
+    font-size:0.75rem;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+
+  .catalog{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:18px;
+  }
+
+  .specimen{
+    background:var(--bg-card);
+    border:1.5px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px 18px;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .specimen.unlocked:hover{
+    transform:translateY(-3px);
+    border-color:var(--leaf);
+    cursor:pointer;
+  }
+  .specimen.locked{opacity:0.55;}
+  .specimen.done{border-color:var(--leaf);}
+  .specimen.empty{cursor:default; opacity:0.7;}
+
+  .accession{
+    font-family:'Fraunces', serif;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    letter-spacing:0.06em;
+  }
+  .specimen h3{
+    font-family:'Fraunces', serif;
+    font-size:1.28rem;
+    font-weight:600;
+    color:var(--pine);
+    line-height:1.25;
+  }
+  .specimen p.desc{font-size:0.86rem; color:var(--ink-soft); flex-grow:1;}
+
+  .status-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:6px;
+    font-size:0.78rem;
+  }
+  .badge{
+    padding:3px 9px;
+    border-radius:20px;
+    font-weight:600;
+    font-size:0.72rem;
+    letter-spacing:0.02em;
+  }
+  .badge.locked{background:#E3DED0; color:var(--ink-soft);}
+  .badge.ready{background:#E4EEDD; color:var(--leaf);}
+  .badge.passed{background:var(--pine); color:#fff;}
+  .badge.retry{background:#F4E0D8; color:var(--rust);}
+  .badge.empty{background:#EEE6D2; color:var(--ochre);}
+  .best-score{color:var(--ink-soft);}
+
+  .telegram-link{
+    font-size:0.78rem;
+    color:var(--ochre);
+    text-decoration:none;
+    border-bottom:1px dashed var(--ochre);
+    align-self:flex-start;
+  }
+
+  /* QUIZ VIEW */
+  #quizView{display:none;}
+  .quiz-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .back-link{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .back-link:hover{color:var(--pine);}
+
+  .quiz-progress-bar{
+    height:6px;
+    width:100%;
+    background:var(--line);
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:28px;
+  }
+  .quiz-progress-fill{
+    height:100%;
+    background:var(--leaf);
+    transition:width .25s ease;
+  }
+
+  .question-card{
+    background:var(--bg-card);
+    border:1.5px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px;
+    max-width:680px;
+  }
+  .q-number{
+    font-family:'Fraunces', serif;
+    color:var(--ochre);
+    font-size:0.85rem;
+    margin-bottom:10px;
+    font-weight:700;
+  }
+  .q-text{
+    font-size:1.18rem;
+    color:var(--pine);
+    margin-bottom:22px;
+    line-height:1.4;
+  }
+  .options{display:flex; flex-direction:column; gap:10px;}
+  .option{
+    text-align:left;
+    padding:13px 16px;
+    border:1.5px solid var(--line);
+    border-radius:var(--radius);
+    background:#fff;
+    font-family:'Karla', sans-serif;
+    font-size:0.96rem;
+    color:var(--ink);
+    cursor:pointer;
+    transition:all .12s ease;
+  }
+  .option:hover{border-color:var(--leaf);}
+  .option.selected{border-color:var(--pine); background:#E4EEDD;}
+  .option.correct{border-color:var(--leaf); background:#DCEFD6;}
+  .option.incorrect{border-color:var(--rust); background:#F8DFD8;}
+  .option:disabled{cursor:default;}
+
+  .quiz-nav{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:24px;
+    max-width:680px;
+  }
+  button.primary{
+    background:var(--pine);
+    color:#fff;
+    border:none;
+    padding:12px 26px;
+    border-radius:var(--radius);
+    font-family:'Karla', sans-serif;
+    font-weight:600;
+    font-size:0.92rem;
+    cursor:pointer;
+  }
+  button.primary:disabled{background:var(--line); cursor:not-allowed;}
+  button.primary:hover:not(:disabled){background:#152B20;}
+
+  /* RESULT VIEW */
+  #resultView{display:none;}
+  .result-card{
+    background:var(--bg-card);
+    border:1.5px solid var(--line);
+    border-radius:var(--radius);
+    padding:40px;
+    max-width:520px;
+    text-align:center;
+  }
+  .result-score{
+    font-family:'Fraunces', serif;
+    font-size:3.4rem;
+    font-weight:700;
+    color:var(--pine);
+    margin-bottom:6px;
+  }
+  .result-verdict{
+    font-size:1rem;
+    font-weight:700;
+    letter-spacing:0.03em;
+    margin-bottom:6px;
+  }
+  .result-verdict.pass{color:var(--leaf);}
+  .result-verdict.fail{color:var(--rust);}
+  .result-desc{color:var(--ink-soft); font-size:0.9rem; margin-bottom:28px;}
+  .result-actions{display:flex; gap:12px; justify-content:center;}
+  button.secondary{
+    background:transparent;
+    border:1.5px solid var(--pine);
+    color:var(--pine);
+    padding:11px 22px;
+    border-radius:var(--radius);
+    font-family:'Karla', sans-serif;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+  /* MODAL (login) */
+  .modal-overlay{
+    display:none;
+    position:fixed; inset:0;
+    background:rgba(21,39,29,0.55);
+    z-index:50;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:var(--bg-card);
+    border-radius:var(--radius);
+    padding:32px;
+    width:100%;
+    max-width:380px;
+  }
+  .modal-box h2{
+    font-family:'Fraunces', serif;
+    color:var(--pine);
+    margin-bottom:18px;
+    font-size:1.3rem;
+  }
+  .field-label{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    font-weight:600;
+    margin-bottom:5px;
+    display:block;
+  }
+  .field-input, .field-textarea, .field-select{
+    width:100%;
+    padding:10px 12px;
+    border:1.5px solid var(--line);
+    border-radius:var(--radius);
+    font-family:'Karla', sans-serif;
+    font-size:0.92rem;
+    margin-bottom:14px;
+    background:#fff;
+    color:var(--ink);
+  }
+  .field-textarea{resize:vertical; min-height:60px;}
+  .modal-actions{display:flex; gap:10px; margin-top:6px;}
+  .modal-error{color:var(--rust); font-size:0.82rem; margin-bottom:10px; display:none;}
+  .modal-close{
+    background:none; border:none; color:var(--ink-soft);
+    font-size:0.82rem; cursor:pointer; margin-top:14px; text-decoration:underline;
+  }
+
+  /* ADMIN VIEW */
+  #adminView{display:none;}
+  .admin-block{
+    background:var(--bg-card);
+    border:1.5px solid var(--line);
+    border-radius:var(--radius);
+    padding:24px;
+    margin-bottom:24px;
+    max-width:720px;
+  }
+  .admin-block h3{font-family:'Fraunces', serif; color:var(--pine); margin-bottom:16px; font-size:1.15rem;}
+  .admin-topic-row{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    margin-bottom:10px;
+  }
+  .admin-topic-row-head{
+    display:flex; justify-content:space-between; align-items:center; cursor:pointer;
+  }
+  .admin-topic-row-head strong{color:var(--pine); font-family:'Fraunces', serif;}
+  .admin-topic-meta{font-size:0.76rem; color:var(--ink-soft);}
+  .admin-qform{display:none; margin-top:14px; border-top:1px dashed var(--line); padding-top:14px;}
+  .admin-qform.open{display:block;}
+  .option-row{display:flex; align-items:center; gap:8px; margin-bottom:8px;}
+  .option-row input[type=radio]{accent-color:var(--leaf);}
+  .option-row .field-input{margin-bottom:0; flex-grow:1;}
+  .existing-q{
+    font-size:0.82rem;
+    padding:8px 10px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    margin-bottom:6px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+  }
+  .existing-q button{
+    background:none; border:none; color:var(--rust); cursor:pointer; font-size:0.75rem; font-weight:600;
+  }
+  .danger-btn{
+    background:none; border:1.5px solid var(--rust); color:var(--rust);
+    padding:5px 12px; border-radius:var(--radius); font-size:0.76rem; cursor:pointer; font-weight:600;
+  }
+  .small-btn{
+    background:none; border:1.5px solid var(--leaf); color:var(--leaf);
+    padding:5px 12px; border-radius:var(--radius); font-size:0.76rem; cursor:pointer; font-weight:600;
+  }
+
+  @media (max-width:640px){
+    header{padding:22px 5vw 16px;}
+    main{padding:28px 5vw 60px;}
+    h1.page-title{font-size:1.6rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="brand-mark">🌿 Olimpiada.Science.uz</span>
+    <span class="brand-tag">Biologiya · Tabiiy fanlar</span>
+  </div>
+  <div class="header-right">
+    <div class="progress-summary">
+      O'zlashtirilgan mavzular<br>
+      <strong id="progressCount">0 / 0</strong>
+    </div>
+    <button class="admin-toggle" id="adminToggleBtn">🔑 O'qituvchi kirishi</button>
+  </div>
+</header>
+
+<main>
+
+  <div id="catalogView">
+    <div class="section-eyebrow">Mavzular katalogi</div>
+    <h1 class="page-title">Telegram kanalidan mavzuni o'rganing, so'ng shu yerda bilimingizni sinang.</h1>
+    <div class="subject-tabs" id="subjectTabs"></div>
+    <div class="catalog" id="catalogGrid"></div>
+  </div>
+
+  <div id="quizView">
+    <div class="quiz-header">
+      <a href="#" class="back-link" id="backLink">← Mavzular ro'yxatiga qaytish</a>
+      <span id="quizTopicName" style="font-family:'Fraunces',serif; color:var(--pine); font-weight:600;"></span>
+    </div>
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div></div>
+    <div class="question-card">
+      <div class="q-number" id="qNumber"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="qOptions"></div>
+    </div>
+    <div class="quiz-nav">
+      <button class="primary" id="nextBtn" disabled>Javobni tasdiqlash</button>
+    </div>
+  </div>
+
+  <div id="resultView">
+    <div class="result-card">
+      <div class="result-score" id="resultScore">0%</div>
+      <div class="result-verdict" id="resultVerdict"></div>
+      <div class="result-desc" id="resultDesc"></div>
+      <div class="result-actions">
+        <button class="secondary" id="retryBtn">Qayta urinish</button>
+        <button class="primary" id="continueBtn">Mavzularga qaytish</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminView">
+    <div class="section-eyebrow">O'qituvchi paneli</div>
+    <h1 class="page-title">Mavzu va savollarni shu yerdan boshqaring.</h1>
+
+    <div class="admin-block" id="seedBlock" style="display:none;">
+      <h3>Boshlang'ich mavzular</h3>
+      <p style="font-size:0.85rem; color:var(--ink-soft); margin-bottom:14px;">Baza bo'sh ko'rinadi. Xohlasangiz, 20 ta tayyor Science mavzu nomini (savolsiz) bir tugma bilan yuklashingiz mumkin.</p>
+      <button class="small-btn" id="seedBtn">🌱 20 ta Science mavzusini yuklash</button>
+    </div>
+
+    <div class="admin-block">
+      <h3>Yangi mavzu qo'shish</h3>
+      <label class="field-label">Fan</label>
+      <select class="field-select" id="newTopicSubject">
+        <option value="biology">Biologiya</option>
+        <option value="science">Tabiiy fanlar (Science)</option>
+      </select>
+      <label class="field-label">Mavzu nomi</label>
+      <input class="field-input" id="newTopicTitle" placeholder="Masalan: Hujayra tuzilishi">
+      <label class="field-label">Qisqa tavsif</label>
+      <input class="field-input" id="newTopicDesc" placeholder="1 qatorlik izoh">
+      <label class="field-label">Telegram post havolasi</label>
+      <input class="field-input" id="newTopicTelegram" placeholder="https://t.me/...">
+      <div class="modal-error" id="newTopicError"></div>
+      <button class="primary" id="addTopicBtn">+ Mavzu qo'shish</button>
+    </div>
+
+    <div class="admin-block">
+      <h3>Mavjud mavzular</h3>
+      <div id="adminTopicList"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-box">
+    <h2>O'qituvchi kirishi</h2>
+    <div class="modal-error" id="loginError"></div>
+    <label class="field-label">Email</label>
+    <input class="field-input" id="loginEmail" type="email" placeholder="email@misol.com">
+    <label class="field-label">Parol</label>
+    <input class="field-input" id="loginPassword" type="password" placeholder="••••••••">
+    <div class="modal-actions">
+      <button class="primary" id="loginSubmitBtn" style="flex:1;">Kirish</button>
+    </div>
+    <button class="modal-close" id="loginCloseBtn">Bekor qilish</button>
+  </div>
+</div>
+
+<!-- =========================================================
+     FIREBASE ULANISHI — bu qismni o'z Firebase config'ingiz bilan
+     almashtiring (QOLLANMA.md'dagi 7-qismga qarang)
+     ========================================================= -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD3LDKEgsWysMGocyMggUrlLHwvDlUsS2s",
+  authDomain: "olimpiada-science.firebaseapp.com",
+  projectId: "olimpiada-science",
+  storageBucket: "olimpiada-science.firebasestorage.app",
+  messagingSenderId: "273641090807",
+  appId: "1:273641090807:web:9d5ad577e01b3a1c19edf2"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
+</script>
+
+<script>
+/* ============================================================
+   1) SOZLAMALAR
+   ============================================================ */
+const SUBJECTS = [
+  { id: "biology", label: "Biologiya" },
+  { id: "science", label: "Tabiiy fanlar (Science)" }
+];
+const PASS_THRESHOLD = 80; // % — shu balldan yuqori bo'lsa keyingi mavzu ochiladi
+
+// Boshlang'ich 20 ta Science mavzusi (savolsiz) — admin panelidagi "seed" tugmasi shundan foydalanadi
+const SEED_SCIENCE_TOPICS = [
+  ["Gulli o'simliklar", "Gulli o'simliklarning tuzilishi va ko'payishi."],
+  ["Moslanishlar", "Organizmlarning tashqi muhitga moslashuv xususiyatlari."],
+  ["Moddalarning agregat holatlari", "Qattiq, suyuq va gazsimon holatlar hamda ular orasidagi o'tish."],
+  ["Moddalarning o'zaro ta'siri", "Moddalar orasidagi kimyoviy va fizik ta'sirlar."],
+  ["Kuchlar", "Nyuton qonunlari va kundalik hayotdagi kuchlar."],
+  ["Tovushlar", "Tovush to'lqinlari, chastota va tovush xususiyatlari."],
+  ["Magnitlar va magnit kuchi", "Magnitlanish hodisasi va magnit maydon xossalari."],
+  ["Atmosfera, suvning tabiatda aylanishi", "Yer atmosferasi tuzilishi va suv aylanish jarayoni."],
+  ["Atrof muhitning ifloslanishi", "Ifloslanish turlari va ularning tabiatga ta'siri."],
+  ["Yer sayyorasining harakati", "Yerning o'z o'qi va Quyosh atrofida aylanishi."],
+  ["Ovqat hazm qilish sistemasi", "Ovqat hazm qilish a'zolari va ularning vazifalari."],
+  ["Nafas va qon aylanish sistemasi", "Nafas olish va yurak-qon tomir sistemasi ishlashi."],
+  ["Kasalliklar", "Kasalliklarning turlari, sabablari va oldini olish."],
+  ["Ozuqa zanjiri va ozuqa to'ri", "Ekosistemadagi energiya va ozuqa oqimi."],
+  ["Fizik va kimyoviy o'zgarishlar", "Moddalarda sodir bo'ladigan o'zgarish turlari."],
+  ["Yorug'likning tarqalishi", "Yorug'lik nurlari, sinish va qaytish hodisalari."],
+  ["Elektr zanjirlar", "Elektr toki, zanjir elementlari va ularning ulanishi."],
+  ["Tog' jinslari", "Tog' jinslarining turlari va hosil bo'lishi."],
+  ["Tuproq va uning xossalari", "Tuproq tarkibi, turlari va unumdorligi."],
+  ["Quyosh sistemasi", "Quyosh sistemasidagi sayyoralar va ularning xususiyatlari."]
+];
+
+/* ============================================================
+   2) NATIJALARNI SAQLASH (har bir o'quvchining o'z brauzerida)
+   ============================================================ */
+const STORAGE_KEY = "olimpiada_progress_v1";
+function loadProgress(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function saveProgress(p){ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }
+let progress = loadProgress(); // { topicId: { bestScore, passed } }
+
+/* ============================================================
+   3) FIREBASE'DAN MAVZULARNI JONLI (REALTIME) O'QISH
+   ============================================================ */
+let TOPICS = []; // Firestore'dan keladi: {id, subject, order, title, desc, telegram, questions:[...]}
+let isAdmin = false;
+
+db.collection("topics").onSnapshot((snapshot) => {
+  TOPICS = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  TOPICS.sort((a, b) => (a.subject || '').localeCompare(b.subject || '') || (a.order || 0) - (b.order || 0));
+  renderCatalog();
+  if(isAdmin) renderAdminTopicList();
+  document.getElementById('seedBlock').style.display = (isAdmin && TOPICS.length === 0) ? 'block' : 'none';
+}, (err) => {
+  console.error("Firestore xato:", err);
+});
+
+/* ============================================================
+   4) KATALOG (o'quvchi ko'radigan qism)
+   ============================================================ */
+const catalogView = document.getElementById('catalogView');
+const catalogGrid = document.getElementById('catalogGrid');
+const quizView = document.getElementById('quizView');
+const resultView = document.getElementById('resultView');
+const adminView = document.getElementById('adminView');
+
+let currentSubject = "science";
+
+function topicsOf(subjectId){ return TOPICS.filter(t => t.subject === subjectId); }
+
+function isUnlocked(topic){
+  const subjectTopics = topicsOf(topic.subject);
+  const idx = subjectTopics.findIndex(t => t.id === topic.id);
+  if(idx === 0) return true;
+  const prevId = subjectTopics[idx - 1].id;
+  return progress[prevId] && progress[prevId].passed;
+}
+
+function renderTabs(){
+  const tabsEl = document.getElementById('subjectTabs');
+  tabsEl.innerHTML = "";
+  SUBJECTS.forEach(s => {
+    const subjectTopics = topicsOf(s.id);
+    const done = subjectTopics.filter(t => progress[t.id] && progress[t.id].passed).length;
+    const btn = document.createElement('button');
+    btn.className = 'subject-tab' + (s.id === currentSubject ? ' active' : '');
+    btn.innerHTML = `${s.label} <span class="count">(${done}/${subjectTopics.length})</span>`;
+    btn.addEventListener('click', () => { currentSubject = s.id; renderCatalog(); });
+    tabsEl.appendChild(btn);
+  });
+}
+
+function renderCatalog(){
+  if(catalogView.style.display === 'none') return;
+  renderTabs();
+  catalogGrid.innerHTML = "";
+  const visible = topicsOf(currentSubject);
+
+  if(visible.length === 0){
+    catalogGrid.innerHTML = `<div style="grid-column:1/-1; padding:40px 20px; text-align:center; color:var(--ink-soft); border:1.5px dashed var(--line); border-radius:4px;">
+      🌱 Bu bo'lim uchun mavzular tez orada qo'shiladi.
+    </div>`;
+    document.getElementById('progressCount').textContent = `${TOPICS.filter(t => progress[t.id] && progress[t.id].passed).length} / ${TOPICS.length}`;
+    return;
+  }
+
+  visible.forEach((t) => {
+    const unlocked = isUnlocked(t);
+    const hasQuestions = t.questions && t.questions.length > 0;
+    const rec = progress[t.id];
+
+    const card = document.createElement('div');
+    let cls = 'specimen ' + (unlocked ? 'unlocked' : 'locked') + (rec && rec.passed ? ' done' : '');
+    if(unlocked && !hasQuestions) cls += ' empty';
+    card.className = cls;
+
+    let badgeHtml;
+    if(!unlocked){
+      badgeHtml = `<span class="badge locked">🔒 Yopiq</span>`;
+    } else if(!hasQuestions){
+      badgeHtml = `<span class="badge empty">✎ Tayyorlanmoqda</span>`;
+    } else if(rec && rec.passed){
+      badgeHtml = `<span class="badge passed">✓ O'zlashtirildi</span><span class="best-score">${rec.bestScore}%</span>`;
+    } else if(rec && !rec.passed){
+      badgeHtml = `<span class="badge retry">Qayta urinish</span><span class="best-score">eng yaxshi: ${rec.bestScore}%</span>`;
+    } else {
+      badgeHtml = `<span class="badge ready">Boshlashga tayyor</span>`;
+    }
+
+    card.innerHTML = `
+      <div class="accession">Mavzu №${String(t.order).padStart(2,'0')}</div>
+      <h3>${t.title}</h3>
+      <p class="desc">${t.desc || ''}</p>
+      ${unlocked && t.telegram ? `<a class="telegram-link" href="${t.telegram}" target="_blank" onclick="event.stopPropagation()">📎 Telegramda o'rganish</a>` : ''}
+      <div class="status-row">${badgeHtml}</div>
+    `;
+
+    if(unlocked && hasQuestions){
+      card.addEventListener('click', () => startQuiz(t.id));
+    }
+    catalogGrid.appendChild(card);
+  });
+
+  const doneCount = TOPICS.filter(t => progress[t.id] && progress[t.id].passed).length;
+  document.getElementById('progressCount').textContent = `${doneCount} / ${TOPICS.length}`;
+}
+
+/* ============================================================
+   5) TEST (QUIZ) MANTIG'I
+   ============================================================ */
+let currentTopicId = null;
+let currentQuestionIndex = 0;
+let answers = [];
+let selectedOption = null;
+
+function startQuiz(topicId){
+  currentTopicId = topicId;
+  currentQuestionIndex = 0;
+  answers = [];
+  selectedOption = null;
+  catalogView.style.display = 'none';
+  resultView.style.display = 'none';
+  adminView.style.display = 'none';
+  quizView.style.display = 'block';
+  const topic = TOPICS.find(t => t.id === topicId);
+  document.getElementById('quizTopicName').textContent = topic.title;
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const topic = TOPICS.find(t => t.id === currentTopicId);
+  const q = topic.questions[currentQuestionIndex];
+  selectedOption = null;
+
+  document.getElementById('qNumber').textContent = `Savol ${currentQuestionIndex+1} / ${topic.questions.length}`;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('quizProgressFill').style.width = `${(currentQuestionIndex/topic.questions.length)*100}%`;
+
+  const optsContainer = document.getElementById('qOptions');
+  optsContainer.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => selectOption(i, btn));
+    optsContainer.appendChild(btn);
+  });
+
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.disabled = true;
+  nextBtn.textContent = (currentQuestionIndex === topic.questions.length - 1) ? "Testni yakunlash" : "Keyingi savol";
+  nextBtn.onclick = confirmAnswer;
+}
+
+function selectOption(i, btn){
+  if(document.querySelectorAll('.option')[0].disabled) return;
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedOption = i;
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function confirmAnswer(){
+  const topic = TOPICS.find(t => t.id === currentTopicId);
+  const q = topic.questions[currentQuestionIndex];
+  const optionButtons = document.querySelectorAll('.option');
+
+  if(!optionButtons[0].disabled){
+    optionButtons.forEach((btn, i) => {
+      btn.disabled = true;
+      if(i === q.correct) btn.classList.add('correct');
+      else if(i === selectedOption) btn.classList.add('incorrect');
+    });
+    answers.push(selectedOption === q.correct);
+    document.getElementById('nextBtn').textContent = (currentQuestionIndex === topic.questions.length - 1) ? "Natijani ko'rish" : "Keyingi savol →";
+    return;
+  }
+
+  if(currentQuestionIndex < topic.questions.length - 1){
+    currentQuestionIndex++;
+    renderQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz(){
+  const topic = TOPICS.find(t => t.id === currentTopicId);
+  const correctCount = answers.filter(Boolean).length;
+  const scorePct = Math.round((correctCount / topic.questions.length) * 100);
+  const passed = scorePct >= PASS_THRESHOLD;
+
+  const prevBest = (progress[topic.id] && progress[topic.id].bestScore) || 0;
+  progress[topic.id] = {
+    bestScore: Math.max(prevBest, scorePct),
+    passed: passed || (progress[topic.id] && progress[topic.id].passed) || false
+  };
+  saveProgress(progress);
+
+  quizView.style.display = 'none';
+  resultView.style.display = 'block';
+  document.getElementById('resultScore').textContent = `${scorePct}%`;
+  const verdictEl = document.getElementById('resultVerdict');
+  const descEl = document.getElementById('resultDesc');
+  if(passed){
+    verdictEl.textContent = "O'tdingiz! 🎉";
+    verdictEl.className = "result-verdict pass";
+    descEl.textContent = `Siz ${PASS_THRESHOLD}% bo'sag'asidan o'tdingiz. Keyingi mavzu endi ochiq.`;
+  } else {
+    verdictEl.textContent = "Hali yetarli emas";
+    verdictEl.className = "result-verdict fail";
+    descEl.textContent = `Keyingi mavzuga o'tish uchun kamida ${PASS_THRESHOLD}% kerak. Mavzuni Telegramda qayta o'rganib, testni qayta ishlang.`;
+  }
+
+  document.getElementById('retryBtn').onclick = () => startQuiz(currentTopicId);
+  document.getElementById('continueBtn').onclick = () => {
+    resultView.style.display = 'none';
+    catalogView.style.display = 'block';
+    renderCatalog();
+  };
+}
+
+document.getElementById('backLink').addEventListener('click', (e) => {
+  e.preventDefault();
+  quizView.style.display = 'none';
+  catalogView.style.display = 'block';
+  renderCatalog();
+});
+
+/* ============================================================
+   6) O'QITUVCHI KIRISHI (LOGIN)
+   ============================================================ */
+const loginModal = document.getElementById('loginModal');
+const adminToggleBtn = document.getElementById('adminToggleBtn');
+
+adminToggleBtn.addEventListener('click', () => {
+  if(isAdmin){
+    auth.signOut();
+  } else {
+    loginModal.classList.add('open');
+  }
+});
+
+document.getElementById('loginCloseBtn').addEventListener('click', () => {
+  loginModal.classList.remove('open');
+});
+
+document.getElementById('loginSubmitBtn').addEventListener('click', () => {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+  auth.signInWithEmailAndPassword(email, pass).catch((err) => {
+    errEl.textContent = "Email yoki parol noto'g'ri.";
+    errEl.style.display = 'block';
+  });
+});
+
+auth.onAuthStateChanged((user) => {
+  isAdmin = !!user;
+  adminToggleBtn.textContent = isAdmin ? "🔓 Admin panel" : "🔑 O'qituvchi kirishi";
+  adminToggleBtn.classList.toggle('logged-in', isAdmin);
+  loginModal.classList.remove('open');
+
+  if(isAdmin){
+    catalogView.style.display = 'none';
+    quizView.style.display = 'none';
+    resultView.style.display = 'none';
+    adminView.style.display = 'block';
+    renderAdminTopicList();
+    document.getElementById('seedBlock').style.display = (TOPICS.length === 0) ? 'block' : 'none';
+  } else {
+    adminView.style.display = 'none';
+    catalogView.style.display = 'block';
+    renderCatalog();
+  }
+});
+
+/* ============================================================
+   7) ADMIN PANELI — mavzu va savol qo'shish
+   ============================================================ */
+document.getElementById('seedBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('seedBtn');
+  btn.disabled = true;
+  btn.textContent = "Yuklanmoqda...";
+  for(let i = 0; i < SEED_SCIENCE_TOPICS.length; i++){
+    const [title, desc] = SEED_SCIENCE_TOPICS[i];
+    await db.collection("topics").add({
+      subject: "science",
+      order: i + 1,
+      title, desc,
+      telegram: "",
+      questions: []
+    });
+  }
+  btn.textContent = "✓ Yuklandi";
+});
+
+document.getElementById('addTopicBtn').addEventListener('click', async () => {
+  const subject = document.getElementById('newTopicSubject').value;
+  const title = document.getElementById('newTopicTitle').value.trim();
+  const desc = document.getElementById('newTopicDesc').value.trim();
+  const telegram = document.getElementById('newTopicTelegram').value.trim();
+  const errEl = document.getElementById('newTopicError');
+  errEl.style.display = 'none';
+
+  if(!title){
+    errEl.textContent = "Mavzu nomini kiriting.";
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const order = topicsOf(subject).length + 1;
+  await db.collection("topics").add({ subject, order, title, desc, telegram, questions: [] });
+
+  document.getElementById('newTopicTitle').value = '';
+  document.getElementById('newTopicDesc').value = '';
+  document.getElementById('newTopicTelegram').value = '';
+});
+
+function renderAdminTopicList(){
+  const listEl = document.getElementById('adminTopicList');
+  listEl.innerHTML = "";
+
+  SUBJECTS.forEach(s => {
+    const subjectTopics = topicsOf(s.id);
+    if(subjectTopics.length === 0) return;
+
+    const header = document.createElement('div');
+    header.style.cssText = "font-family:'Fraunces',serif; color:var(--pine); font-weight:600; margin:14px 0 8px;";
+    header.textContent = s.label;
+    listEl.appendChild(header);
+
+    subjectTopics.forEach(t => {
+      const row = document.createElement('div');
+      row.className = 'admin-topic-row';
+      row.innerHTML = `
+        <div class="admin-topic-row-head">
+          <div>
+            <strong>${t.title}</strong>
+            <div class="admin-topic-meta">${(t.questions||[]).length} ta savol</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="small-btn" data-action="toggle">+ Savol qo'shish</button>
+            <button class="danger-btn" data-action="delete">O'chirish</button>
+          </div>
+        </div>
+        <div class="admin-qform" id="qform-${t.id}">
+          <div id="existingQs-${t.id}"></div>
+          <label class="field-label">Savol matni</label>
+          <input class="field-input" id="qtext-${t.id}" placeholder="Savolni yozing">
+          <label class="field-label">Variantlar (to'g'ri javobni belgilang)</label>
+          <div class="option-row"><input type="radio" name="correct-${t.id}" value="0" checked><input class="field-input" id="opt0-${t.id}" placeholder="A variant"></div>
+          <div class="option-row"><input type="radio" name="correct-${t.id}" value="1"><input class="field-input" id="opt1-${t.id}" placeholder="B variant"></div>
+          <div class="option-row"><input type="radio" name="correct-${t.id}" value="2"><input class="field-input" id="opt2-${t.id}" placeholder="C variant"></div>
+          <div class="option-row"><input type="radio" name="correct-${t.id}" value="3"><input class="field-input" id="opt3-${t.id}" placeholder="D variant"></div>
+          <div class="modal-error" id="qerror-${t.id}"></div>
+          <button class="primary" data-action="addq">+ Savolni saqlash</button>
+        </div>
+      `;
+      listEl.appendChild(row);
+
+      row.querySelector('[data-action="toggle"]').addEventListener('click', () => {
+        const form = row.querySelector(`#qform-${t.id}`);
+        form.classList.toggle('open');
+        renderExistingQuestions(t);
+      });
+
+      row.querySelector('[data-action="delete"]').addEventListener('click', async () => {
+        if(confirm(`"${t.title}" mavzusini butunlay o'chirmoqchimisiz?`)){
+          await db.collection("topics").doc(t.id).delete();
+        }
+      });
+
+      row.querySelector('[data-action="addq"]').addEventListener('click', async () => {
+        const qtext = document.getElementById(`qtext-${t.id}`).value.trim();
+        const opts = [0,1,2,3].map(i => document.getElementById(`opt${i}-${t.id}`).value.trim());
+        const correct = parseInt(row.querySelector(`input[name="correct-${t.id}"]:checked`).value, 10);
+        const errEl = document.getElementById(`qerror-${t.id}`);
+        errEl.style.display = 'none';
+
+        if(!qtext || opts.some(o => !o)){
+          errEl.textContent = "Savol va barcha 4 ta variantni to'ldiring.";
+          errEl.style.display = 'block';
+          return;
+        }
+
+        const newQuestions = [...(t.questions||[]), { q: qtext, options: opts, correct }];
+        await db.collection("topics").doc(t.id).update({ questions: newQuestions });
+
+        document.getElementById(`qtext-${t.id}`).value = '';
+        [0,1,2,3].forEach(i => document.getElementById(`opt${i}-${t.id}`).value = '');
+      });
+    });
+  });
+}
+
+function renderExistingQuestions(topic){
+  const container = document.getElementById(`existingQs-${topic.id}`);
+  if(!container) return;
+  const qs = topic.questions || [];
+  if(qs.length === 0){
+    container.innerHTML = `<p style="font-size:0.8rem; color:var(--ink-soft); margin-bottom:10px;">Hali savol yo'q.</p>`;
+    return;
+  }
+  container.innerHTML = qs.map((q, i) => `
+    <div class="existing-q">
+      <span>${i+1}. ${q.q}</span>
+      <button data-idx="${i}">O'chirish</button>
+    </div>
+  `).join('');
+  container.querySelectorAll('button[data-idx]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const idx = parseInt(btn.dataset.idx, 10);
+      const updated = topic.questions.filter((_, i) => i !== idx);
+      await db.collection("topics").doc(topic.id).update({ questions: updated });
+    });
+  });
+}
+</script>
+
+</body>
+</html>
